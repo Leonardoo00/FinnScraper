@@ -1,7 +1,6 @@
 # TODO
 # - Notify for any request fail with status code
-# - Add some soup error handling 
-# - Test any strange possible ad like ad without images
+# - Add some soup error handling
 # - Add User-Agent or any other headers attribute 
 # - Error handilign for the webhook notification
 # - Add notify for ERROR via webhook
@@ -19,7 +18,7 @@ load_dotenv()
 URL = os.getenv("URL")
 WEBHOOK_URL = os.getenv("WEBHOOK_URL")
 STATE_FILE = Path("seen_ads.json")
-SCAN_INTERVAL = 60 # seconds between scrape runs 
+SCAN_INTERVAL = 300  # seconds between scrape runs 
 REQUEST_TIMEOUT = 10 # seconds of timeout for request
 
 def get_response():
@@ -43,10 +42,16 @@ def get_ad_dict(ad) -> dict:
     # Two images should be avaiable for ad
     img_raw   = ad.find_all("div", {"class":"aspect-16/9"})
     # Smth like <div class: "...", alt = "Bilde X" <img src = ".."
+
     ad_images = []
-    for img in img_raw:
-        ad_image = img.find("img")["src"]
-        ad_images.append(ad_image)
+
+    #NOTE: manage the case where no image is provided
+    try:
+        for img in img_raw:
+            ad_image = img.find("img")["src"]
+            ad_images.append(ad_image)
+    except:
+        ad_images.append("https://www.immobiliareandromeda.it/wp-content/uploads/a-casa-dos-flintstones.jpg")
 
     # Missing the prefix: https://www.finn.no/
     ad_link  = ad.find("a", {"class":"sf-search-ad-link"})["href"]
