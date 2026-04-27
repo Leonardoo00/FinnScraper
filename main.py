@@ -21,8 +21,8 @@ load_dotenv()
 URL             = os.getenv("URL")
 WEBHOOK_URL     = os.getenv("WEBHOOK_URL")
 STATE_FILE      = Path("seen_ads.json")
-SCAN_INTERVAL   = os.getenv("SCAN_INTERVAL")  # seconds between scrape runs
-REQUEST_TIMEOUT = os.getenv("REQUEST_TIMEOUT") # seconds of timeout for request
+SCAN_INTERVAL   = os.getenv("SCAN_INTERVAL")             # seconds between scrape runs
+REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", 10))  # seconds of timeout for request
 
 def get_response():
     res = requests.get(URL, timeout=REQUEST_TIMEOUT)
@@ -73,7 +73,7 @@ def get_ad_dict(ad) -> dict:
     # Fill the dict
     ad_dict = {
         "ID"     : ad_id,
-        "LINK"   : "https://www.finn.no/" + ad_link,
+        "LINK"   : "https://www.finn.no" + ad_link,
         "TITLE"  : ad_title, 
         "ADDRESS": ad_address,
         "SQM"    : ad_sqm,
