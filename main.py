@@ -21,7 +21,7 @@ load_dotenv()
 URL             = os.getenv("URL")
 WEBHOOK_URL     = os.getenv("WEBHOOK_URL")
 STATE_FILE      = Path("seen_ads.json")
-SCAN_INTERVAL   = os.getenv("SCAN_INTERVAL")             # seconds between scrape runs
+SCAN_INTERVAL   = int(os.getenv("SCAN_INTERVAL", 300))   # seconds between scrape runs
 REQUEST_TIMEOUT = int(os.getenv("REQUEST_TIMEOUT", 10))  # seconds of timeout for request
 
 def get_response():
