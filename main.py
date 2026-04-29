@@ -62,9 +62,14 @@ def get_ad_dict(ad) -> dict:
     ad_address = ad.find("div", {"class":"sf-realestate-location"}).get_text()
 
     # Price & Sqm
-    quant_data = list(ad.find("div", {"class":"justify-between"}).find_all("span"))
-    ad_sqm     = quant_data[0].get_text()
-    ad_price   = quant_data[1].get_text()
+    # NOTE: Manage the case of no price or sqm
+    try:
+        quant_data = list(ad.find("div", {"class":"justify-between"}).find_all("span"))
+        ad_sqm     = quant_data[0].get_text()
+        ad_price   = quant_data[1].get_text()
+    except:
+        ad_sqm   = "N/A"
+        ad_price = "N/A"
 
     # Type of ad (i.e. Apartment w/ 4 bedrooms)
     ad_type = ad.find("div", {"class":"sm:items-baseline"}).get_text()
